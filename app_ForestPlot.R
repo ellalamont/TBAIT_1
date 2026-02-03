@@ -5,6 +5,8 @@ library(shiny)
 library(devtools)
 library(DuffyTools)
 
+# The forest plot tools is quite simplistic, using no 3rd party programs or sophisticated methods at all.  I simply starts from the log2 fold change values of one Differential Expression results file you give it (typically one "XXXX.Meta.Joined.txt" file), and then for each gene set, it takes that subset of genes, plots the median and 95% confidence interval of those log2 fold change values, and uses a 1-sample T-test stats assessment to ask "Is this set of values different from zero? (i.e. is the set of genes DE overall?)"
+
 source("Import_DEG_sets.R")
 source("Import_GeneSets.R")
 
