@@ -78,6 +78,34 @@ my_pipeSummary <- All_pipeSummary %>% inner_join(All_metadata, by = "SampleID") 
 # Remove samples with low N_Genomic
 my_pipeSummary <- my_pipeSummary %>% filter(CASS_Pos != "Low_N_Genomic") # 186 samples
 
+###########################################################
+###################### IMPORT LINEAGE #####################
+
+# TBAIT_Run_1
+TBAIT_Run_1_Lineages <- read.csv("Data/TBAIT_Run_1/All_FinalLineageCalls.csv")
+
+# TBAIT_Seq
+TBAIT_Seq_Lineages <- read.csv("Data/TBAIT_Seq/All_FinalLineageCalls.csv")
+
+# 2025_10_LF_LA_EL
+X2025_10_LF_LA_EL_Lineages <- read.csv("Data/2025_10_LF_LA_EL/All_FinalLineageCalls.csv")
+
+# 20250508_LRF_pH_trim50
+X20250508_LRF_pH_trim50_Lineages <- read.csv("Data/20250508_LRF_pH_trim50/All_FinalLineageCalls.csv")
+
+# Merge the pipeSummaries
+All_Lineages <- merge(TBAIT_Run_1_Lineages, TBAIT_Seq_Lineages, all = T)
+All_Lineages <- merge(All_Lineages, X2025_10_LF_LA_EL_Lineages, all = T)
+All_Lineages <- merge(All_Lineages, X20250508_LRF_pH_trim50_Lineages, all = T)
+
+# Add a cleaner mixed column
+All_Lineages <- All_Lineages %>% 
+  mutate(MixedLineages = ifelse(InfectionCall == "Infection call = 'Unmixed'", "No", "Yes")) %>%
+  filter(!is.na(F2_metric)) # Also remove the NAs
+
+# Add Lineage info to the pipeSummary
+my_pipeSummary <- my_pipeSummary %>% 
+  left_join(All_Lineages %>% select(SampleID, LineageID, MixedLineages), by = "SampleID")
 
 ###########################################################
 ##################### IMPORT RAW READS ####################
