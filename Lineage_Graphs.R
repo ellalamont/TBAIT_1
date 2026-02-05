@@ -25,7 +25,6 @@ my_lineages_Percents <- my_pipeSummary %>%
   filter(CASS_Pos != "H37Rv") %>%
   filter(MixedLineages2 == "No") %>%
   filter(Replicate == "1") %>%
-  mutate(MainLineage = paste0("L", sub("^Lineage ([0-9]+).*", "\\1", LineageID))) %>% 
   count(CASS_Pos, MainLineage) %>%
   group_by(CASS_Pos) %>%
   mutate(Percent = round(n/sum(n) * 100, 1)) %>%
@@ -86,7 +85,6 @@ my_lineages_Percents <- my_pipeSummary %>%
   filter(CASS_Pos != "H37Rv") %>%
   filter(MixedLineages2 == "No") %>%
   filter(Replicate == "1") %>%
-  mutate(MainLineage = paste0("L", sub("^Lineage ([0-9]+).*", "\\1", LineageID))) %>% 
   count(Cough_25, MainLineage) %>%
   group_by(Cough_25) %>%
   mutate(Percent = round(n/sum(n) * 100, 1)) %>%
