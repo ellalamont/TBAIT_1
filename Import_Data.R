@@ -72,11 +72,6 @@ All_pipeSummary <- merge(All_pipeSummary, X20250508_LRF_pH_trim50_pipeSummary, a
 
 All_metadata <- read.csv("Data/Metadata/TBAIT_seq_metadata_Clean.csv")
 
-# Merge metadata with pipeSummary and only keep sampleIDs that are in metadata
-my_pipeSummary <- All_pipeSummary %>% inner_join(All_metadata, by = "SampleID") # 227 samples
-
-# Remove samples with low N_Genomic
-my_pipeSummary <- my_pipeSummary %>% filter(CASS_Pos != "Low_N_Genomic") # 186 samples
 
 ###########################################################
 ###################### IMPORT LINEAGE #####################
@@ -100,12 +95,30 @@ All_Lineages <- merge(All_Lineages, X20250508_LRF_pH_trim50_Lineages, all = T)
 
 # Add a cleaner mixed column
 All_Lineages <- All_Lineages %>% 
-  mutate(MixedLineages = ifelse(InfectionCall == "Infection call = 'Unmixed'", "No", "Yes")) %>%
+  mutate(MixedLineages2 = ifelse(InfectionCall == "Infection call = 'Unmixed'", "No", "Yes")) %>%
+  mutate(MainLineage = paste0("L", sub("^Lineage ([0-9]+).*", "\\1", LineageID))) %>%
   filter(!is.na(F2_metric)) # Also remove the NAs
+
+# Save for Lance
+# write.csv(All_Lineages, "Data/All_TBAIT_LineageCalls.csv")
+
+
+###########################################################
+################## MERGE WITH PIPESUMMARY #################
+
+# Merge metadata with pipeSummary and only keep sampleIDs that are in metadata
+my_pipeSummary <- All_pipeSummary %>% inner_join(All_metadata, by = "SampleID") # 227 samples
+
+# Remove samples with low N_Genomic
+my_pipeSummary <- my_pipeSummary %>% filter(CASS_Pos != "Low_N_Genomic") # 186 samples
 
 # Add Lineage info to the pipeSummary
 my_pipeSummary <- my_pipeSummary %>% 
-  left_join(All_Lineages %>% select(SampleID, LineageID, MixedLineages), by = "SampleID")
+  left_join(All_Lineages %>% select(SampleID, LineageID, MixedLineages, MixedLineages2, MainLineage), by = "SampleID")
+
+# Export for Lance
+# write.csv(my_pipeSummary, "Data/TBAIT_1_my_pipeSummary_20250205.csv", row.names = F)
+
 
 ###########################################################
 ##################### IMPORT RAW READS ####################
