@@ -40,9 +40,9 @@ my_PCA <- prcomp(my_tpm_bc_t, scale = TRUE)
 # See the % Variance explained
 summary(my_PCA)
 summary_PCA <- format(round(as.data.frame(summary(my_PCA)[["importance"]]['Proportion of Variance',]) * 100, digits = 1), nsmall = 1) # format and round used to control the digits after the decimal place
-summary_PCA[1,1] # PC1 explains 63.6% of variance
-summary_PCA[2,1] # PC2 explains 4.3% of variance
-summary_PCA[3,1] # PC3 explains 4.1% of variance
+summary_PCA[1,1] 
+summary_PCA[2,1] 
+summary_PCA[3,1]
 
 # MAKE PCA PLOT with GGPLOT 
 my_PCA_df <- as.data.frame(my_PCA$x[, 1:3]) # Extract the first 3 PCs
