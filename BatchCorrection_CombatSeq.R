@@ -31,16 +31,15 @@ all(meta$SampleID == colnames(count_matrix))  # should be TRUE
 
 # Extract batch (run) and condition (for checking later)
 batch <- meta$Run
-condition <- meta$CASS_Pos # Should condition be patient ID or CASS score?
+condition <- meta$Type 
 # Tried condition being PID and it made the batch effect way worse on the PCA!
-
 
 
 # Run ComBat-Seq
 combat_counts <- ComBat_seq(
   count_matrix,
-  batch = batch,
-  group = NULL# , # optional, helps preserve biological signal
+  batch = meta$Run,
+  group = meta$Type # optional, helps preserve biological signal
   # covar_mod = covar_mat # Would set group to NULL if using this
 )
 
