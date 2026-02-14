@@ -118,13 +118,17 @@ resLFC
 ################################################
 ############ SAVE AS NICE DATAFRAME ############
 
-res_Cough75vs25_df <- as.data.frame(resLFC) %>% # Could use resLFC and see how it is different
+res_Cough75vs25_df <- as.data.frame(res) %>% # Could use resLFC and see how it is different
   rownames_to_column("gene")
 
 # Columns for Log2Fold > 1
 res_Cough75vs25_df$DE1 <- ifelse(res_Cough75vs25_df$log2FoldChange < -1 & res_Cough75vs25_df$padj < 0.05, "significant down", ifelse(res_Cough75vs25_df$log2FoldChange > 1 & res_Cough75vs25_df$padj < 0.05, "significant up", "not significant"))
 res_Cough75vs25_df$DE1 <- factor(res_Cough75vs25_df$DE1, levels = c("significant down", "not significant", "significant up"))
 res_Cough75vs25_df$DE1_labels <- ifelse(res_Cough75vs25_df$DE1 != "not significant", res_Cough75vs25_df$gene, NA)
+
+# Save as csv
+write.csv(res_Cough75vs25_df, "Data/DESeq2_Results/res_Cough75vs25_df.csv")
+
 
 ################################################
 ################# VOLCANO PLOT #################
@@ -160,10 +164,10 @@ my_volcano_annotated <- my_volcano +
 final_volcano <- my_volcano_annotated + my_plot_themes
 final_volcano
 # ggplotly(final_volcano)
-ggsave(final_volcano,
-       file = "Cough75vsCough25_DESeq2_v1.pdf",
-       path = "Figures/Volcano/DESeq2",
-       width = 7, height = 5, units = "in")
+# ggsave(final_volcano,
+#        file = "Cough75vsCough25_DESeq2_v1.pdf",
+#        path = "Figures/Volcano/DESeq2",
+#        width = 7, height = 5, units = "in")
 
 
 

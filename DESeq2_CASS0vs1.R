@@ -112,13 +112,16 @@ resLFC
 ################################################
 ############ SAVE AS NICE DATAFRAME ############
 
-res_CASS1vs0_df <- as.data.frame(res) %>% # Could use resLFC and see how it is different
+res_CASS1vs0_df <- as.data.frame(resLFC) %>% # Could use resLFC and see how it is different
   rownames_to_column("gene")
 
 # Columns for Log2Fold > 1
 res_CASS1vs0_df$DE1 <- ifelse(res_CASS1vs0_df$log2FoldChange < -1 & res_CASS1vs0_df$padj < 0.05, "significant down", ifelse(res_CASS1vs0_df$log2FoldChange > 1 & res_CASS1vs0_df$padj < 0.05, "significant up", "not significant"))
 res_CASS1vs0_df$DE1 <- factor(res_CASS1vs0_df$DE1, levels = c("significant down", "not significant", "significant up"))
 res_CASS1vs0_df$DE1_labels <- ifelse(res_CASS1vs0_df$DE1 != "not significant", res_CASS1vs0_df$gene, NA)
+
+# Save as csv
+write.csv(res_CASS1vs0_df, "Data/DESeq2_Results/DESeq2_res_CASS1vs0_df.csv")
 
 ################################################
 ################# VOLCANO PLOT #################
