@@ -114,7 +114,8 @@ my_pipeSummary <- my_pipeSummary %>% filter(CASS_Pos != "Low_N_Genomic") # 186 s
 
 # Add Lineage info to the pipeSummary
 my_pipeSummary <- my_pipeSummary %>% 
-  left_join(All_Lineages %>% select(SampleID, LineageID, MixedLineages, MixedLineages2, MainLineage), by = "SampleID")
+  left_join(All_Lineages %>% select(SampleID, LineageID, MixedLineages, MixedLineages2, MainLineage), by = "SampleID") %>%
+  mutate(across(where(is.character), str_trim)) # Remove any trailing spaces
 
 # Export for Lance
 # write.csv(my_pipeSummary, "Data/TBAIT_1_my_pipeSummary_20250205.csv", row.names = F)
