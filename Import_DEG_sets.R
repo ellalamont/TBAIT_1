@@ -4,6 +4,32 @@
 
 source("Import_data.R")
 
+
+###########################################################
+################# IMPORT DESeq2 DATAFRAMES ################
+
+parent_dir <- "Data/DESeq2_Results"
+csv_files <- list.files(parent_dir, full.names = TRUE)
+
+# Read all CSVs into a list of data.frames
+DESeq2_dfs <- lapply(csv_files, read.csv)
+
+# Add the names to the list of lists
+names(DESeq2_dfs) <- tools::file_path_sans_ext(basename(csv_files))
+
+# Also make a list of the names
+DESeq2_df_names <- names(DESeq2_dfs)
+
+
+
+
+
+
+
+
+
+
+
 # Data is coming from the Lenovo TBAIT_AllRuns
 
 ###########################################################
