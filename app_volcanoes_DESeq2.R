@@ -1,7 +1,5 @@
 # 2/25/26
 
-# NOT WORKING!
-
 library(shiny)
 library(gmodels)
 
@@ -25,20 +23,20 @@ my_plot_themes <- theme_bw() +
 
 # Define UI ----
 ui <- fluidPage(
-  titlePanel("TBAIT All Samples Volcanos"),
+  titlePanel("TBAIT All Samples Volcanos DESeq2 (batch corrected; replicates collapsed)"),
   
   fluidRow(
     
     column(width = 4,
            selectInput("my_comparison",
                        label = "Volcano plots",
-                       choices = df_names,
+                       choices = DESeq2_df_names,
                        width = "100%"),
            
            # Add buttons for changing the log2fold threshold
            radioButtons("log2fc_threshold", 
                         label = "log2 fold change threshold", 
-                        choices = c("log2FC > abs(1)" = "1"),
+                        choices = c("log2FC > abs(1)" = "1", "log2FC > abs(0.5)" = "2"),
                         selected = "1",
                         inline = TRUE),
            
@@ -47,9 +45,6 @@ ui <- fluidPage(
                     textInput("my_GeneID", 
                               label = "Gene ID (Will label gene orange)",
                               value = "Rv...")
-             ),
-             column(width = 2.5,
-                    uiOutput("gene_link")  # New UI output for the link
              )
            ),
            # Add checkbox to toggle gene set points
@@ -76,13 +71,6 @@ ui <- fluidPage(
 # Define server logic ----
 server <- function(input, output, session) {
   
-  # Gene Link
-  output$gene_link <- renderUI({
-    req(input$my_GeneID)  # Ensure there's a valid input
-    url <- paste0("https://mycobrowser.epfl.ch/genes/", input$my_GeneID)
-    tags$a(href = url, target = "_blank", paste0("View Details of ", input$my_GeneID, " on Mycobrowser"))
-  })
-  
   # When a new gene set source is selected, update the gene set dropdown
   observeEvent(input$my_GeneSetSource, {
     updateSelectInput(session, "my_GeneSet",
@@ -94,15 +82,15 @@ server <- function(input, output, session) {
   output$volcano_plot <- renderPlotly({
     
     # Add data for labelling a single gene
-    single_gene <- DESeq2_dfs[[input$my_comparison]] %>% 
+    single_gene <- DESeq2_dfs_2[[input$my_comparison]] %>% 
       filter(gene == input$my_GeneID)
     
     # Add data for labelling a gene set
-    gene_set <- DESeq2_dfs[[input$my_comparison]] %>%
+    gene_set <- DESeq2_dfs_2[[input$my_comparison]] %>%
       filter(gene %in% allGeneSetList[[input$my_GeneSetSource]][[input$my_GeneSet]])
     
     # Make new data name for plotting
-    plot_data <- DESeq2_dfs[[input$my_comparison]]
+    plot_data <- DESeq2_dfs_2[[input$my_comparison]]
     
     # Choose DE column and DE_labels column based on selected threshold
     if (input$log2fc_threshold == "1") {
@@ -121,7 +109,7 @@ server <- function(input, output, session) {
     # Make the Volcano Plot
     my_volcano <- plot_data %>%
       
-      ggplot(aes(x = LOG2FOLD, y = -log10(.data[[p_value]]), 
+      ggplot(aes(x = log2FoldChange, y = -log10(.data[[p_value]]), 
                  col = .data[[de_col]], label = .data[[label_col]], 
                  text = gene)) + 
       geom_point(alpha = 0.7) + 
@@ -148,8 +136,8 @@ server <- function(input, output, session) {
     x_min <- min(plot_build$layout$panel_scales_x[[1]]$range$range)
     
     # Add the gene number annotations
-    text_up <- DESeq2_dfs[[input$my_comparison]] %>% filter(.data[[de_col]] == "significant up") %>% nrow()
-    text_down <- DESeq2_dfs[[input$my_comparison]] %>% filter(.data[[de_col]] == "significant down") %>% nrow()
+    text_up <- DESeq2_dfs_2[[input$my_comparison]] %>% filter(.data[[de_col]] == "significant up") %>% nrow()
+    text_down <- DESeq2_dfs_2[[input$my_comparison]] %>% filter(.data[[de_col]] == "significant down") %>% nrow()
     my_volcano_annotated <- my_volcano +
       annotate("text", x = (x_max+1)/2, y = y_max - 0.1, label = paste0(text_up, " genes"), color = "#bb0c00", fontface = "bold", fill = "transparent", label.size = 0.3) + 
       annotate("text", x = (x_min-1)/2, y = y_max - 0.1, label = paste0(text_down, " genes"), color = "#00AFBB", fontface = "bold", fill = "transparent", label.size = 0.3)
