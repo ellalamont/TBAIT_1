@@ -61,6 +61,11 @@ allGeneSetList <- lapply(allGeneSetList, function(gset) {
 # allGeneSets <- split(LRFGeneSets_2026.02.03$Gene, LRFGeneSets_2026.02.03$GeneSet)
 # save(allGeneSets, file = "Data/GeneSet_Data/LRFGeneSets_2026.02.03.rda")
 
+# 2/7/25: New gene sets for lance
+# LRFGeneSets_2026.02.27 <- read.csv("Data/GeneSet_Data/LRF_GeneSets_2026.02.27.csv")
+# allGeneSets <- split(LRFGeneSets_2026.02.27$Gene, LRFGeneSets_2026.02.27$GeneSet)
+# save(allGeneSets, file = "Data/GeneSet_Data/LRFGeneSets_2026.02.27.rda")
+
 
 ###########################################################
 ############ iMODULONS: MAKE LISTS OF GROUPS ##############
