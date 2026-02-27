@@ -125,19 +125,22 @@ my_pipeSummary <- my_pipeSummary %>%
 ##################### IMPORT RAW READS ####################
 
 # TBAIT_Run_1
-TBAIT_Run_1_RawReads <- read.csv("Data/TBAIT_Run_1/Mtb.Expression.Gene.Data.ReadsM.csv") %>% rename("Gene" = "X") %>%
+TBAIT_Run_1_RawReads <- read.csv("Data/TBAIT_Run_1/Mtb.Expression.Gene.Data.ReadsM.csv") %>% 
+  dplyr::rename("Gene" = "X") %>%
   select(any_of(c("Gene", my_pipeSummary$SampleID)))
 
 # TBAIT_Seq
-TBAIT_Seq_RawReads <- read.csv("Data/TBAIT_Seq/Mtb.Expression.Gene.Data.ReadsM.csv") %>% rename("Gene" = "X") %>%
+TBAIT_Seq_RawReads <- read.csv("Data/TBAIT_Seq/Mtb.Expression.Gene.Data.ReadsM.csv") %>% 
+  dplyr::rename("Gene" = "X") %>%
   select(any_of(c("Gene", my_pipeSummary$SampleID)))
 
 # 2025_10_LF_LA_EL
-X2025_10_LF_LA_EL_RawReads <- read.csv("Data/2025_10_LF_LA_EL/Mtb.Expression.Gene.Data.ReadsM.csv") %>% rename("Gene" = "X") %>%
+X2025_10_LF_LA_EL_RawReads <- read.csv("Data/2025_10_LF_LA_EL/Mtb.Expression.Gene.Data.ReadsM.csv") %>% 
+  dplyr::rename("Gene" = "X") %>%
   select(any_of(c("Gene", my_pipeSummary$SampleID)))
 
 # 20250508_LRF_pH_trim50
-X20250508_LRF_pH_trim50_RawReads <- read.csv("Data/20250508_LRF_pH_trim50/Mtb.Expression.Gene.Data.ReadsM.csv") %>% rename("Gene" = "X") %>%
+X20250508_LRF_pH_trim50_RawReads <- read.csv("Data/20250508_LRF_pH_trim50/Mtb.Expression.Gene.Data.ReadsM.csv") %>% dplyr::rename("Gene" = "X") %>%
   select(any_of(c("Gene", my_pipeSummary$SampleID)))
 
 # Merge the Raw Reads
@@ -150,19 +153,19 @@ my_RawReads <- merge(my_RawReads, X20250508_LRF_pH_trim50_RawReads, all = T) # 1
 ##################### IMPORT BOB'S TPM ####################
 
 # TBAIT_Run_1
-TBAIT_Run_1_TPM <- read.csv("Data/TBAIT_Run_1/Mtb.Expression.Gene.Data.TPM.csv") %>% rename("Gene" = "X") %>%
+TBAIT_Run_1_TPM <- read.csv("Data/TBAIT_Run_1/Mtb.Expression.Gene.Data.TPM.csv") %>% dplyr::rename("Gene" = "X") %>%
   select(any_of(c("Gene", my_pipeSummary$SampleID)))
 
 # TBAIT_Seq
-TBAIT_Seq_TPM <- read.csv("Data/TBAIT_Seq/Mtb.Expression.Gene.Data.TPM.csv") %>% rename("Gene" = "X") %>%
+TBAIT_Seq_TPM <- read.csv("Data/TBAIT_Seq/Mtb.Expression.Gene.Data.TPM.csv") %>% dplyr::rename("Gene" = "X") %>%
   select(any_of(c("Gene", my_pipeSummary$SampleID)))
 
 # 2025_10_LF_LA_EL
-X2025_10_LF_LA_EL_TPM <- read.csv("Data/2025_10_LF_LA_EL/Mtb.Expression.Gene.Data.TPM.csv") %>% rename("Gene" = "X") %>%
+X2025_10_LF_LA_EL_TPM <- read.csv("Data/2025_10_LF_LA_EL/Mtb.Expression.Gene.Data.TPM.csv") %>% dplyr::rename("Gene" = "X") %>%
   select(any_of(c("Gene", my_pipeSummary$SampleID)))
 
 # 20250508_LRF_pH_trim50
-X20250508_LRF_pH_trim50_TPM <- read.csv("Data/20250508_LRF_pH_trim50/Mtb.Expression.Gene.Data.TPM.csv") %>% rename("Gene" = "X") %>%
+X20250508_LRF_pH_trim50_TPM <- read.csv("Data/20250508_LRF_pH_trim50/Mtb.Expression.Gene.Data.TPM.csv") %>% dplyr::rename("Gene" = "X") %>%
   select(any_of(c("Gene", my_pipeSummary$SampleID)))
 
 # Merge the Raw Reads
