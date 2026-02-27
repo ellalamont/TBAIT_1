@@ -64,7 +64,7 @@ my_tpm_bc <- CalculateTPM(my_RawReads_bc)
 colSums(my_tpm_bc) # Just check it's all 1M
 
 
-
+# write.csv(my_tpm_bc, "Data/my_tpm_bc.csv")
 
 
 
