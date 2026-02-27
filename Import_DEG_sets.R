@@ -21,8 +21,12 @@ names(DESeq2_dfs) <- tools::file_path_sans_ext(basename(csv_files))
 DESeq2_df_names <- names(DESeq2_dfs)
 
 
-
-
+# Add an extra DE column so the app is easier! 
+source("Function_Add_DE_Columns.R")
+DESeq2_dfs_2 <- DESeq2_dfs %>%
+  lapply(add_DE_columns_function,
+         log2fold_cutoff = 0.5,
+         padj_cutoff = 0.05)
 
 
 
